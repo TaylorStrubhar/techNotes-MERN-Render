@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const AUtoIncrement = require('mongoose-sequence')(mongoose)
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const noteSchema = new mongoose.Schema(
     {
