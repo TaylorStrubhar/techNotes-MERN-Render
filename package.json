@@ -2,10 +2,10 @@
   "name": "technotes-mern-render",
   "version": "1.0.0",
   "description": "techNotes MERN Render",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server"
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
   },
   "keywords": [],
   "author": "",
