@@ -1,7 +1,12 @@
-import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+    createSelector,
+    createEntityAdapter
+} from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice"
 
-const notesAdapter = createEntityAdapter({})
+const notesAdapter = createEntityAdapter({
+    sortComparer: (a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1
+})
 
 const initialState = notesAdapter.getInitialState()
 
@@ -12,7 +17,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             validateStatus: (response, result) => {
                 return response.status === 200 && !result.isError
             },
-            keepUnusedDataFor: 60,
+            keepUnusedDataFor: 5,
             transformResponse: responseData => {
                 const loadedNotes = responseData.map(note => {
                     note.id = note._id
@@ -28,11 +33,13 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                     ]
                 } else return [{ type: 'Note', id: 'LIST' }]
             }
-        })
-    })
+        }),
+    }),
 })
 
-export const { useGetNotesQuery } = notesApiSlice
+export const {
+    useGetNotesQuery,
+} = notesApiSlice
 
 // returns the query result object
 export const selectNotesResult = notesApiSlice.endpoints.getNotes.select()
@@ -43,7 +50,7 @@ const selectNotesData = createSelector(
     notesResult => notesResult.data // normalized state object with ids & entities
 )
 
-// getSelectors creates these selectors and we rename them with aliases using destructuring
+//getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {
     selectAll: selectAllNotes,
     selectById: selectNoteById,
