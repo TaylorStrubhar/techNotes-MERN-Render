@@ -2,7 +2,6 @@ const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
-const { json } = require('express')
 
 // @desc Login
 // @route POST /auth
@@ -11,7 +10,7 @@ const login = asyncHandler(async (req, res) => {
     const { username, password } = req.body
 
     if (!username || !password) {
-        return res.status(400).json({ message: 'All fields are required!' })
+        return res.status(400).json({ message: 'All fields are required' })
     }
 
     const foundUser = await User.findOne({ username }).exec()
@@ -32,24 +31,24 @@ const login = asyncHandler(async (req, res) => {
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '10s' } // 10s is for development
+        { expiresIn: '15m' }
     )
 
     const refreshToken = jwt.sign(
         { "username": foundUser.username },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: '1d' } // change after development
+        { expiresIn: '7d' }
     )
 
-    // This creates secure cookies with refresh token
+    // Create secure cookie with refresh token 
     res.cookie('jwt', refreshToken, {
-        httpOnly: true, // accessible only by web server
-        secure: true, // https
-        sameSite: 'None', // cross-site cookie
-        maxAge: 7 * 24 * 60 * 60 * 1000 // cookie expire set to match refreshToken (7 days post development)
+        httpOnly: true, //accessible only by web server 
+        secure: true, //https versus false = http
+        sameSite: 'None', //cross-site cookie 
+        maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
     })
 
-    // sends accessToken containing the username and roles
+    // Send accessToken containing username and roles 
     res.json({ accessToken })
 })
 
@@ -69,7 +68,7 @@ const refresh = (req, res) => {
         asyncHandler(async (err, decoded) => {
             if (err) return res.status(403).json({ message: 'Forbidden' })
 
-            const foundUser = await User.findOne({ username: decoded.username })
+            const foundUser = await User.findOne({ username: decoded.username }).exec()
 
             if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
 
@@ -81,7 +80,7 @@ const refresh = (req, res) => {
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '10s' } // 10s for development
+                { expiresIn: '15m' }
             )
 
             res.json({ accessToken })
@@ -91,10 +90,10 @@ const refresh = (req, res) => {
 
 // @desc Logout
 // @route POST /auth/logout
-// @access Public - just to clear cookies if they exist
+// @access Public - just to clear cookie if exists
 const logout = (req, res) => {
     const cookies = req.cookies
-    if (!cookies?.jwt) return res.sendStatus(204) // 204 is No Content
+    if (!cookies?.jwt) return res.sendStatus(204) //No content
     res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
     res.json({ message: 'Cookie cleared' })
 }
