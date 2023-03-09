@@ -4,7 +4,9 @@
 
 ## Description
 
-I built this app using the MERN stack and following along with a tutorial taught by Dave Gray. In this app, users can login, create work tickets, view, edit and delete these tickets. Work tickets also can be assigned to different users. Administrators and Managers can create new users(Employees by default), suspend a user's ability to log into the app and delete users. The backend was built with MongoDB, Express and Node, with authentication being handled by jwt and security with bcrypt. The front end was built with React and React-Redux. Authorization was built using jwt-decode and redux. Thanks to [Dave Gray](https://github.com/gitdagray) for the great lesson!
+I built this app using the MERN stack and following along with a tutorial taught by Dave Gray. In this app, users can login, create work tickets and then view, edit and delete these tickets. Work tickets can also be assigned to different users. Administrators and Managers can create new users(Employees by default), suspend a user's ability to log into the app and delete users. 
+
+The backend was built with MongoDB, Express and Node, with authentication being handled by jwt and security with bcrypt. The front end was built with React and React-Redux. Authorization was built using jwt-decode and redux. Thanks to [Dave Gray](https://github.com/gitdagray) for the great lesson!
 
 ## Table of Contents
 
